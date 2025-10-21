@@ -33,7 +33,6 @@ public class Main extends JavaPlugin {
 		cmdVerifyKey = new NamespacedKey(Main.get, "UTILITIES_COMMANDITEM_VERIFY");
 		cmdKey = new NamespacedKey(Main.get, "UTILITIES_COMMANDITEM_COMMAND");
 		RecipeType.load();
-		//TESTING
 	}
 
 	@Override
