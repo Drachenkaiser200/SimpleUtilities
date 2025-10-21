@@ -1,0 +1,11 @@
+name: SimpleUtilities
+version: 1.0beta
+main: me.unknown.utilities.Main
+author: Shamanzination
+api: bukkit, craftbukkit
+api-version: 1.19
+depend: [Vault]
+commands:
+  simpleutilities:
+   aliases: [ su, simpleu, sutilities ]
+   usage: /simpleutilities
