@@ -36,59 +36,64 @@ public class UpdateChecker {
                 String currentVersion = plugin.getDescription().getVersion();
 
                 if (latestVersion == null) {
-                    plugin.getLogger().warning("Could not determine latest version from GitHub.");
+                    Bukkit.getConsoleSender().sendMessage("§cCould not determine latest version from GitHub.");
                     return;
                 }
 
                 if (!currentVersion.equalsIgnoreCase(latestVersion.replace("v", ""))) {
-                    plugin.getLogger().warning("A new update is available!");
-                    plugin.getLogger().warning("Current version: " + currentVersion);
-                    plugin.getLogger().warning("Latest version: " + latestVersion);
-                    plugin.getLogger().warning("Run /updateplugin to update automatically.");
+                    Bukkit.getConsoleSender().sendMessage("§aA new update is available!");
+                    Bukkit.getConsoleSender().sendMessage("§aCurrent version: " + currentVersion);
+                    Bukkit.getConsoleSender().sendMessage("§aLatest version: " + latestVersion);
+                    Bukkit.getConsoleSender().sendMessage("§aRun /updateplugin to update automatically.");
+                    update();
                 } else {
-                    plugin.getLogger().info("You are using the latest version.");
+                    Bukkit.getConsoleSender().sendMessage("§6You are using the latest version.");
                 }
 
             } catch (Exception e) {
-                plugin.getLogger().warning("Error checking for updates: " + e.getMessage());
+                Bukkit.getConsoleSender().sendMessage("§cError checking for updates: " + e.getMessage());
             }
         });
     }
 
     public void update() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTask(plugin, () -> {
             try {
-                plugin.getLogger().info("Checking GitHub for latest release...");
+                Bukkit.getConsoleSender().sendMessage("Checking GitHub for latest release...");
 
                 String apiUrl = "https://api.github.com/repos/" + repo + "/releases/latest";
                 String json = readUrl(apiUrl);
 
                 String downloadUrl = matchJson(json, "\"browser_download_url\"\\s*:\\s*\"([^\"]+\\.jar)\"");
                 if (downloadUrl == null) {
-                    plugin.getLogger().warning("No .jar download URL found in release.");
+                    Bukkit.getConsoleSender().sendMessage("§cNo .jar download URL found in release.");
                     return;
                 }
 
                 File currentJar = getPluginFile();
                 if (currentJar == null) {
-                    plugin.getLogger().warning("Unable to locate current plugin JAR.");
+                    Bukkit.getConsoleSender().sendMessage("§cUnable to locate current plugin JAR.");
                     return;
                 }
 
-                plugin.getLogger().info("Downloading update from: " + downloadUrl);
+                Bukkit.getConsoleSender().sendMessage("§6Downloading update from: " + downloadUrl);
 
-                Path tempFile = Paths.get(currentJar.getParent(), "update_" + currentJar.getName());
+                Bukkit.getPluginManager().disablePlugin(plugin);
+                
+                Path tempFile = Paths.get(currentJar.getParent(), "u_" + currentJar.getName());
                 try (InputStream in = new URL(downloadUrl).openStream()) {
                     Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
                 }
 
                 Files.move(tempFile, currentJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//                Bukkit.getPluginManager().loadPlugin(getPluginFile());
+//                Bukkit.getPluginManager().enablePlugin(plugin);
 
-                plugin.getLogger().info("Plugin updated successfully!");
-                plugin.getLogger().info("Please restart the server to apply the update.");
+                Bukkit.getConsoleSender().sendMessage("§aPlugin updated successfully!");
+//                Bukkit.getConsoleSender().sendMessage("§aPlease restart the server to apply the update.");
 
             } catch (Exception e) {
-                plugin.getLogger().warning("Update failed: " + e.getMessage());
+                Bukkit.getConsoleSender().sendMessage("§cUpdate failed: " + e.getMessage());
                 e.printStackTrace();
             }
         });

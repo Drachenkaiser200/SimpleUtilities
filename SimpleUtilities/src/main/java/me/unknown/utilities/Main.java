@@ -28,21 +28,22 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onLoad() {
+		
+	}
+	
+	
+	@Override
+	public void onEnable() {
+		
+		UpdateChecker uc = new UpdateChecker(this, "Drachenkaiser200/SimpleUtilities");
+		
+		uc.checkForUpdates();
+		
 		get = this;
 		prefix = "§a[§2SimpleUtilities§a] §a";
 		cmdVerifyKey = new NamespacedKey(Main.get, "UTILITIES_COMMANDITEM_VERIFY");
 		cmdKey = new NamespacedKey(Main.get, "UTILITIES_COMMANDITEM_COMMAND");
 		RecipeType.load();
-	}
-
-	@Override
-	public void onEnable() {
-		
-		UpdateChecker uc = new UpdateChecker(get, "");
-//		uc.checkForUpdates();
-		
-//		if(uc.hasToUpdate)
-		uc.update();
 		
 		if (!setupEconomy().equals("true")) {
             getLogger().severe(setupEconomy());
