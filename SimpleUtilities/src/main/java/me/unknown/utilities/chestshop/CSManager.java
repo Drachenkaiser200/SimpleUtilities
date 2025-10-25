@@ -55,7 +55,7 @@ public class CSManager {
 	}
 
 	public boolean isChestShop(Block b) {
-		if(!BlockUtil.isSign(b) || chestShopYML.getKeys(false).isEmpty())
+		if(b == null || !BlockUtil.isSign(b) || chestShopYML.getKeys(false).isEmpty())
 			return false;
 		for(String s : chestShopYML.getKeys(false)) {
 			if(b.getWorld().getName().equalsIgnoreCase(s.split("_")[4].substring(6)) && b.getX() == Integer.parseInt(s.split("_")[1].substring(2))
@@ -77,7 +77,7 @@ public class CSManager {
 	}
 
 	public boolean isContainerofShop(Block b) {
-		if(!BlockUtil.isContainer(b) || chestShopYML.getKeys(false).isEmpty())
+		if(b == null || !BlockUtil.isContainer(b) || chestShopYML.getKeys(false).isEmpty())
 			return false;
 		for(String s : chestShopYML.getKeys(false)) {
 			Block b2 = BlockUtil.getBlockBehindSign(Bukkit.getWorld(s.split("_")[4].substring(6)).getBlockAt(Integer.parseInt(s.split("_")[1].substring(2)),

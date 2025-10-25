@@ -39,6 +39,8 @@ public class UpdateChecker {
                     Bukkit.getConsoleSender().sendMessage("§cCould not determine latest version from GitHub.");
                     return;
                 }
+                
+                Bukkit.getConsoleSender().sendMessage("§c" + latestVersion);
 
                 if (!currentVersion.equalsIgnoreCase(latestVersion.replace("v", ""))) {
                     Bukkit.getConsoleSender().sendMessage("§aA new update is available!");
@@ -51,6 +53,8 @@ public class UpdateChecker {
                 }
 
             } catch (Exception e) {
+            	if(e.getMessage().startsWith("Server returned HTTP response code: 403"))
+            		return;
                 Bukkit.getConsoleSender().sendMessage("§cError checking for updates: " + e.getMessage());
             }
         });
@@ -127,7 +131,7 @@ public class UpdateChecker {
         return null;
     }
 
-    private File getPluginFile() {
+    public File getPluginFile() {
         try {
             return new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (Exception e) {

@@ -1,9 +1,14 @@
 package me.unknown.utilities;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.unknown.utilities.chestshop.CSManager;
@@ -25,6 +30,7 @@ public class Main extends JavaPlugin {
 	public RecipeManager recipeManager;
 	public CSManager csManager;
 	public Economy econ = null;
+	private UpdateChecker uc;
 	
 	@Override
 	public void onLoad() {
@@ -35,7 +41,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		UpdateChecker uc = new UpdateChecker(this, "Drachenkaiser200/SimpleUtilities");
+		this.uc = new UpdateChecker(this, "Drachenkaiser200/SimpleUtilities");
 		
 		uc.checkForUpdates();
 		
@@ -66,7 +72,21 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		
+		File pluginFile = uc.getPluginFile();
+		PluginManager pm = Bukkit.getPluginManager();
+		try {
+			pm.loadPlugin(pluginFile);
+		} catch (UnknownDependencyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidPluginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidDescriptionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		pm.enablePlugin(pm.getPlugin(getDescription().getName()));
 	}
 	
 	private String setupEconomy() {

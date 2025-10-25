@@ -1,5 +1,5 @@
 name: SimpleUtilities
-version: 1.0beta
+version: v1.1_1.21.8
 main: me.unknown.utilities.Main
 author: Shamanzination
 api: bukkit, craftbukkit
